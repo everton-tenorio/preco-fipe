@@ -22,3 +22,5 @@ Preços médios de veículos diretamente da FIPE.
 Preço médio da Honda Biz 125+ 2010 em 2024(Janeiro-Maio)
 
 <img src='honda-prmedio.png' />
+
+- codigoTipoVeiculo: 1(carro), 2(moto), 3(caminhão)

@@ -21,7 +21,7 @@ url_todos_parametros = f'{url_api}/ConsultarValorComTodosParametros'
 
 # Layout do aplicativo
 app.layout = html.Div([
-    html.H1('Consulta FIPE'),
+    html.H1('Preço FIPE'),
         
     dcc.Dropdown(id='tipo-veiculo', options=[
         {'label': 'Carro', 'value': 1},

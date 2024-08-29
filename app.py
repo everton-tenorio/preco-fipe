@@ -1,11 +1,13 @@
 import dash
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
+from flask import Flask
 import requests
 import plotly.graph_objects as go
 from datetime import datetime
 
-app = dash.Dash(__name__)
+server = Flask(__name__)
+app = dash.Dash(__name__, server=server)
 
 # Função para fazer requisições à API
 def req(url, data):
@@ -216,4 +218,4 @@ def consultar_variacao_preco(n_clicks, ano_consulta, ano, modelo, marca, tipo):
     return fig
 
 if __name__ == '__main__':
-    # app.run_server()
+    pass

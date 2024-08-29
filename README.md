@@ -9,6 +9,10 @@ docker run -dt --rm --entrypoint ./app/run.sh --name preco-fipe -v $(pwd):/app -
 ```
 🌐 http://localhost:8050
 
+<div align="center">
+  <img src="consulta-fipe.png" width="auto">
+  <img src="consulta-variacao-preco.png" width="auto">
+</div>  
 
 ## Licença
 Esse projeto está sob a licença MIT.

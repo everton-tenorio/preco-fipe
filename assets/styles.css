@@ -1,0 +1,98 @@
+body {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+.dash-dropdown {
+    width: 85%;
+    margin: 10px auto;
+    padding: 5px;
+}
+
+.dash-graph {
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+#btn-consulta-preco {
+    margin-left: 100px;
+}
+
+#preco-atual-fipe { 
+    padding: 10px;
+    margin-top: 20px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-bottom: 30px;
+}
+
+li {
+    list-style-type: none;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+.select-variant {
+    position: relative;
+    display: flex;
+}
+
+label#label-select {
+    margin-left: 30px;
+}
+
+#ano-consulta.dash-dropdown {
+    width: 15%;
+    margin: 30px; 
+    padding: 0;
+}
+
+#btn-consulta-variacao {
+    margin: 30px 0 30px 0px;
+}
+
+#grafico-preco {
+    margin-bottom: 25px; 
+    width: 100%;
+}
+
+.github {
+    border: 1px solid black;
+    border-radius: 15px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    margin-top: 1px;
+    width: 220px;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 20px;
+}
+
+@media (max-width: 720px) {
+    #btn-consulta-preco {
+        margin-left: 25px;
+    }
+
+    #preco-atual-fipe { 
+        padding: 10px;
+        margin-top: 20px;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom: 20px;
+    }
+
+    #ano-consulta.dash-dropdown {
+        width: 50%;
+        margin: 30px; 
+        padding: 0;
+    }
+}

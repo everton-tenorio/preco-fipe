@@ -1,26 +1,14 @@
-# preco_fipe
+# preco-fipe
 Preços médios de veículos diretamente da FIPE. 
 
+`requests` `Dash` `Plotly`
 
-```python
-# Exemplo Honda Biz 125+ 2010
-{
- 'Valor': 'R$ 8.629,00',
- 'Marca': 'HONDA',
- 'Modelo': 'BIZ 125+',
- 'AnoModelo': 2010,
- 'Combustivel': 'Gasolina',
- 'CodigoFipe': '811084-0',
- 'MesReferencia': 'maio de 2024 ',
- 'Autenticacao': 'ccy27vd0q9kq',
- 'TipoVeiculo': 2,
- 'SiglaCombustivel': 'G',
- 'DataConsulta': 'quarta-feira, 29 de maio de 2024 09:57'
-}
+## Run
+```bash
+docker run -dt --rm --entrypoint ./app/run.sh --name preco-fipe -v $(pwd):/app -p 8050:8050 python:3.11-alpine
 ```
+🌐 http://localhost:8050
 
-Preço médio da Honda Biz 125+ 2010 em 2024(Janeiro-Maio)
 
-<img src='honda-prmedio.png' />
-
-- codigoTipoVeiculo: 1(carro), 2(moto), 3(caminhão)
+## Licença
+Esse projeto está sob a licença MIT.

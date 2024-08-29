@@ -217,5 +217,3 @@ def consultar_variacao_preco(n_clicks, ano_consulta, ano, modelo, marca, tipo):
     )
     return fig
 
-if __name__ == '__main__':
-    pass

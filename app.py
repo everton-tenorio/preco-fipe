@@ -1,5 +1,5 @@
 from dash import Dash, dcc, html, Output, Input, State
-import requests
+from request_all import req
 import plotly.graph_objects as go
 
 # URLs para API
@@ -21,6 +21,8 @@ class FIPEPrice:
         )
 
         # Configuração inicial e callbacks
+        self.referencias_anos = req(url_tabelaref, '')
+        self.referencias = self.referencias_anos[0]['Codigo']
         self.set_callbacks()
         self.set_layout()
 
@@ -77,8 +79,7 @@ class FIPEPrice:
             Input('btn-consulta-preco', 'n_clicks')
         )
         def populate_year_dropdown(n_clicks):
-            referencias = self.req(url_tabelaref, '')
-            anos = sorted({referencia['Mes'].split('/')[-1].strip() for referencia in referencias}, reverse=True)
+            anos = sorted({referencia['Mes'].split('/')[-1].strip() for referencia in self.referencias_anos}, reverse=True)
             return [{'label': ano, 'value': ano} for ano in anos]
 
         @self.app.callback(
@@ -88,12 +89,11 @@ class FIPEPrice:
         def update_marcas(tipo_veiculo):
             if tipo_veiculo is None:
                 return []
-            referencias = self.req(url_tabelaref, '')
             dados_veiculo_marca = {
-                'codigoTabelaReferencia': referencias[0]['Codigo'],
+                'codigoTabelaReferencia': self.referencias,
                 'codigoTipoVeiculo': tipo_veiculo
             }
-            marcas = self.req(url_marcas, dados_veiculo_marca)
+            marcas = req(url_marcas, dados_veiculo_marca)
             return [{'label': marca['Label'], 'value': marca['Value']} for marca in marcas]
 
         @self.app.callback(
@@ -104,13 +104,12 @@ class FIPEPrice:
         def update_modelos(marca, tipo_veiculo):
             if marca is None:
                 return []
-            referencias = self.req(url_tabelaref, '')
             dados_veiculo_modelo = {
-                'codigoTabelaReferencia': referencias[0]['Codigo'],
+                'codigoTabelaReferencia': self.referencias,
                 'codigoTipoVeiculo': tipo_veiculo,
                 'codigoMarca': marca
             }
-            modelos = self.req(url_modelos, dados_veiculo_modelo)['Modelos']
+            modelos = req(url_modelos, dados_veiculo_modelo)['Modelos']
             return [{'label': modelo['Label'], 'value': modelo['Value']} for modelo in modelos]
 
         @self.app.callback(
@@ -122,14 +121,13 @@ class FIPEPrice:
         def update_anos(modelo, tipo_veiculo, marca):
             if modelo is None:
                 return []
-            referencias = self.req(url_tabelaref, '')
             dados_veiculos_ano_modelo = {
-                'codigoTabelaReferencia': referencias[0]['Codigo'],
+                'codigoTabelaReferencia': self.referencias,
                 'codigoTipoVeiculo': tipo_veiculo,
                 'codigoMarca': marca,
                 'codigoModelo': modelo
             }
-            anos = self.req(url_ano_modelos, dados_veiculos_ano_modelo)
+            anos = req(url_ano_modelos, dados_veiculos_ano_modelo)
             return [{'label': ano['Label'], 'value': ano['Value']} for ano in anos]
 
         @self.app.callback(
@@ -143,10 +141,9 @@ class FIPEPrice:
         def consultar_preco_atual(n_clicks, ano, modelo, marca, tipo):
             if n_clicks == 0:
                 return ''
-            referencias = self.req(url_tabelaref, '')
             ano_modelo, codigo_tipo_combustivel = ano.split('-')
             dados_veiculos_ano_modelo = {
-                'codigoTabelaReferencia': referencias[0]['Codigo'],
+                'codigoTabelaReferencia': self.referencias,
                 'codigoTipoVeiculo': tipo,
                 'codigoMarca': marca,
                 'codigoModelo': modelo,
@@ -155,7 +152,8 @@ class FIPEPrice:
                 'codigoTipoCombustivel': codigo_tipo_combustivel,
                 'tipoConsulta': 'tradicional'
             }
-            response = self.req(url_todos_parametros, dados_veiculos_ano_modelo)
+            response = req(url_todos_parametros, dados_veiculos_ano_modelo)
+
             return html.Div([
                 html.Li(f"Preço Atual: {response['Valor']}"),
                 html.Li(f"Código FIPE: {response['CodigoFipe']}"),
@@ -180,8 +178,7 @@ class FIPEPrice:
             if n_clicks == 0:
                 return go.Figure()
             
-            referencias = self.req(url_tabelaref, '')
-            referencias_ano = [ref for ref in referencias if ref['Mes'].split('/')[1].strip() == ano_consulta]
+            referencias_ano = [ref for ref in self.referencias_anos if ref['Mes'].split('/')[1].strip() == ano_consulta]
             
             meses = []
             precos = []
@@ -198,7 +195,8 @@ class FIPEPrice:
                     'codigoTipoCombustivel': codigo_tipo_combustivel,
                     'tipoConsulta': 'tradicional'
                 }
-                response = self.req(url_todos_parametros, dados_veiculos_ano_modelo)
+
+                response = req(url_todos_parametros, dados_veiculos_ano_modelo)
                 preco_str = response['Valor'].replace('R$ ', '').replace('.', '').replace(',', '.')
                 preco = float(preco_str)
                 meses.append(referencia['Mes'])
@@ -206,16 +204,13 @@ class FIPEPrice:
             
             fig = go.Figure(data=go.Scatter(x=meses, y=precos, mode='lines+markers'))
             fig.update_layout(
-                title=f'{response["Modelo"]} - Variação de Preço por Mês',
+                title=f'Variação de Preço por Mês<br><sup>{response["Modelo"]} {response["AnoModelo"]}<br><sup>https://preco-fipe.vercel.app</sup></sup>',
                 xaxis_title='Mês',
                 yaxis_title='Preço (R$)',
                 xaxis=dict(type='category'),
                 width=500,
             )
             return fig
-
-    def req(self, url, data):
-        return requests.post(url, data=data).json()
 
 
 Application = FIPEPrice()

@@ -56,7 +56,12 @@ class FIPEPrice:
                 html.Button('Consultar', id='btn-consulta-variacao', n_clicks=0),
                 ], className="select-variant"),
                 
-            dcc.Graph(id='grafico-preco'),  
+            dcc.Loading(
+                id='loading-1',
+                type='default',
+                children=[dcc.Graph(id='grafico-preco'),],
+                fullscreen=False
+            ),    
             
             html.Div([
                 html.A(

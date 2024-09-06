@@ -213,7 +213,6 @@ class FIPEPrice:
                 xaxis_title='Mês',
                 yaxis_title='Preço (R$)',
                 xaxis=dict(type='category'),
-                width=500,
             )
             return fig
 
